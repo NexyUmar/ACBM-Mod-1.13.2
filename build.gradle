@@ -19,14 +19,6 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 minecraft {
     mappings channel: 'snapshot', version: '20190213-1.13.2'
-    
-    runs {
-        client {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-        }
-    }
 }
 
 dependencies {
