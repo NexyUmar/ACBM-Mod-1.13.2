@@ -11,24 +11,27 @@ jobs:
 
     steps:
     - name: Скачивание кода
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Настройка Java 8
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         java-version: '8'
         distribution: 'temurin'
 
-    - name: Установка Gradle
-      uses: gradle/gradle-build-action@v2
-      with:
-        gradle-version: '4.10.3'
+    - name: Выдача прав на выполнение Gradlew
+      run: chmod +x gradlew || true
 
     - name: Сборка .jar файла
-      run: gradle build --no-daemon
+      run: |
+        if [ -f "./gradlew" ]; then
+          ./gradlew build --no-daemon
+        else
+          gradle build --no-daemon
+        fi
 
     - name: Сохранение готового .jar
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Compiled-Mod-1.13.2-JAR
         path: build/libs/*.jar
