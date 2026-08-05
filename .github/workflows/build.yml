@@ -1,16 +1,12 @@
-name: Build Minecraft Mod 1.13.2
+name: Direct Java Compile
 
-on:
-  push:
-    branches: [ "main", "master" ]
-  workflow_dispatch:
+on: [push, workflow_dispatch]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Скачивание кода
+    - name: Чтение кода
       uses: actions/checkout@v4
 
     - name: Настройка Java 8
@@ -19,16 +15,20 @@ jobs:
         java-version: '8'
         distribution: 'temurin'
 
-    - name: Установка Gradle
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        gradle-version: '4.10.3'
+    - name: Скачивание библиотек Minecraft 1.13.2
+      run: |
+        mkdir -p lib
+        curl -s -o lib/minecraft.jar https://launcher.mojang.com/v1/objects/3737db93722a9e29ee815c40ae90a787383a8f46/client.jar
 
-    - name: Сборка .jar
-      run: gradle build --no-daemon
+    - name: Компиляция мода
+      run: |
+        mkdir -p bin
+        javac -cp "lib/*" -d bin $(find src/main/java -name "*.java")
+        cp -r src/main/resources/* bin/ 2>/dev/null || true
+        cd bin && zip -r ../AnimeCreveyBolrMod-1.13.2.jar .
 
-    - name: Сохранение готового файла
+    - name: Сохранение готового .jar
       uses: actions/upload-artifact@v4
       with:
-        name: Compiled-Mod-1.13.2-JAR
-        path: build/libs/*.jar
+        name: Compiled-Mod-1.13.2
+        path: AnimeCreveyBolrMod-1.13.2.jar
