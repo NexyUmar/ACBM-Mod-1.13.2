@@ -20,10 +20,17 @@ jobs:
         mkdir -p lib
         curl -s -o lib/minecraft.jar https://launcher.mojang.com/v1/objects/3737db93722a9e29ee815c40ae90a787383a8f46/client.jar
 
-    - name: Компиляция мода
+    - name: Поиск и компиляция
       run: |
         mkdir -p bin
-        find . -type f -name "*.java" | xargs javac -cp "lib/*" -d bin
+        FILES=$(find . -type f -name "*.java")
+        if [ -z "$FILES" ]; then
+          echo "ОШИБКА: Исходные .java файлы не найдены в репозитории!"
+          exit 1
+        fi
+        echo "Найдены файлы для сборки:"
+        echo "$FILES"
+        javac -cp "lib/*" -d bin $FILES
         
         # Копирование ресурсов
         find . -type d -name "resources" -exec cp -r {}/. bin/ \; 2>/dev/null || true
