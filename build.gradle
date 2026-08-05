@@ -1,20 +1,21 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
+        maven { url = 'https://maven.minecraftforge.net/' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
+
 apply plugin: 'net.minecraftforge.gradle'
 
 version = '1.2'
 group = 'com.animecreveybolrmod'
 archivesBaseName = 'AnimeCreveyBolrMod-1.13.2'
 
-sourceCompatibility = targetCompatibility = compileJava.inputs.properties.java : '1.8'
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 minecraft {
     mappings channel: 'snapshot', version: '20190213-1.13.2'
