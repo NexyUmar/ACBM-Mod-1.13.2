@@ -23,11 +23,9 @@ jobs:
     - name: Компиляция мода
       run: |
         mkdir -p bin
-        JAVA_FILES=$(find . -name "*.java")
-        echo "Найдены файлы: $JAVA_FILES"
-        javac -cp "lib/*" -d bin $JAVA_FILES
+        find . -type f -name "*.java" | xargs javac -cp "lib/*" -d bin
         
-        # Копирование ресурсов, если они есть
+        # Копирование ресурсов
         find . -type d -name "resources" -exec cp -r {}/. bin/ \; 2>/dev/null || true
         
         cd bin && zip -r ../AnimeCreveyBolrMod-1.13.2.jar .
@@ -37,4 +35,3 @@ jobs:
       with:
         name: Compiled-Mod-1.13.2
         path: AnimeCreveyBolrMod-1.13.2.jar
-      
